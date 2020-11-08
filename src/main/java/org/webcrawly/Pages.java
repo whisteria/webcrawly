@@ -64,7 +64,7 @@ public class Pages {
     }
 
     interface PageFetcher {
-        PageResult fetch(Link link);
+        PageResult fetch(String url);
     }
 
 }
