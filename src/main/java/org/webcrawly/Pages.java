@@ -12,6 +12,9 @@ public class Pages {
     interface PageLink {
     }
 
+    public static record Error(String error, String errorClass){
+    }
+
     /**
      * the valid link
      *
@@ -20,7 +23,7 @@ public class Pages {
     public static record Link(URI uri, LinkType type) implements PageLink {
     }
 
-    public static record LinkError(String url, LinkType type, String error, String errorClass) implements PageLink {
+    public static record LinkError(String url, LinkType type, Error error) implements PageLink {
     }
 
     /**
@@ -34,7 +37,7 @@ public class Pages {
             final URI uri = source.resolve(url);
             return new Link(uri, type);
         } catch (Exception e) {
-            return new LinkError(url, type, e.getMessage(), e.getClass().getSimpleName());
+            return new LinkError(url, type, new Error(e.getMessage(), e.getClass().getSimpleName()));
         }
     }
 
