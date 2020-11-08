@@ -3,6 +3,7 @@ package org.webcrawly;
 import com.google.common.net.InternetDomainName;
 
 import java.net.URI;
+import java.util.Set;
 
 public class Pages {
 
@@ -11,10 +12,10 @@ public class Pages {
         Image
     }
 
-    interface PageLink {
+    interface LinkResult {
     }
 
-    public static record Error(String error, String errorClass){
+    public static record Error(String error, String errorClass) {
     }
 
     /**
@@ -22,10 +23,10 @@ public class Pages {
      *
      * @param uri an absolute uri
      */
-    public static record Link(URI uri, LinkType type) implements PageLink {
+    public static record Link(URI uri, LinkType type) implements LinkResult {
     }
 
-    public static record LinkError(String url, LinkType type, Error error) implements PageLink {
+    public static record LinkError(String url, LinkType type, Error error) implements LinkResult {
     }
 
     /**
@@ -34,9 +35,11 @@ public class Pages {
      * @param type
      * @return
      */
-    public static PageLink create(URI source, String url, LinkType type) {
+    public static LinkResult create(URI source, String url, LinkType type) {
         try {
             final URI uri = source.resolve(url);
+            // this checks if uri is valid for us
+            uri.toURL();
             return new Link(uri, type);
         } catch (Exception e) {
             return new LinkError(url, type, new Error(e.getMessage(), e.getClass().getSimpleName()));
@@ -45,6 +48,23 @@ public class Pages {
 
     static String rootDomain(URI uri) {
         return InternetDomainName.from(uri.getAuthority()).topPrivateDomain().toString();
+    }
+
+
+    interface PageResult {
+    }
+
+    /**
+     * correspondents to a web page with all its links
+     */
+    public static record Page(Set<LinkResult> links) implements PageResult {
+    }
+
+    public static record PageError(Error error) implements PageResult {
+    }
+
+    interface PageFetcher {
+        PageResult fetch(Link link);
     }
 
 }
