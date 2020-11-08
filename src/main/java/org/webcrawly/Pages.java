@@ -1,5 +1,7 @@
 package org.webcrawly;
 
+import com.google.common.net.InternetDomainName;
+
 import java.net.URI;
 
 public class Pages {
@@ -42,7 +44,7 @@ public class Pages {
     }
 
     static String rootDomain(URI uri) {
-        return null;
+        return InternetDomainName.from(uri.getAuthority()).topPrivateDomain().toString();
     }
 
 }
