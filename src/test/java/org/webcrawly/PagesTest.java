@@ -33,4 +33,11 @@ public class PagesTest {
 
     }
 
+
+    @Test
+    public void rootDomain() {
+        assertEquals("abc.com", Pages.rootDomain(URI.create("http://www.abc.com?name=bob#tag")));
+        assertEquals("abc.com", Pages.rootDomain(URI.create("http://weather.abc.com/index.html")));
+    }
+
 }

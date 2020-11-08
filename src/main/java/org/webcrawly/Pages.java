@@ -41,4 +41,8 @@ public class Pages {
         }
     }
 
+    static String rootDomain(URI uri) {
+        return null;
+    }
+
 }
