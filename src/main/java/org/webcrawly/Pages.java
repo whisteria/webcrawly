@@ -30,7 +30,12 @@ public class Pages {
      * @return
      */
     public static PageLink create(URI source, String url, LinkType type) {
-        return new Link(source.resolve(url), type);
+        try {
+            final URI uri = source.resolve(url);
+            return new Link(uri, type);
+        } catch (Exception e) {
+            return new LinkError(url, type, e.getMessage(), e.getClass().getSimpleName());
+        }
     }
 
 }
