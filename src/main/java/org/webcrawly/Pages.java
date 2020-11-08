@@ -17,7 +17,6 @@ public class Pages {
 
     }
 
-
     /**
      * @param source the page where the url was found
      * @param url
@@ -25,7 +24,7 @@ public class Pages {
      * @return
      */
     public static Link create(URI source, String url, LinkType type) {
-        return null;
+        return new Link(source.resolve(url), type);
     }
 
 }
