@@ -1,10 +1,12 @@
 package org.webcrawly;
 
 import org.junit.Test;
+import org.webcrawly.Pages.LinkError;
 
 import java.net.URI;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.webcrawly.Pages.Link;
 import static org.webcrawly.Pages.LinkType.Image;
 import static org.webcrawly.Pages.LinkType.Page;
@@ -23,6 +25,12 @@ public class PagesTest {
         assertEquals(new Link(URI.create(source + logo), Image), Pages.create(URI.create(source), logo, Image));
         assertEquals(new Link(URI.create(news + logo), Image), Pages.create(URI.create(newsIndex), logo, Image));
         assertEquals(new Link(URI.create(external + logo), Page), Pages.create(URI.create(external), logo, Page));
+    }
+
+    @Test
+    public void createInvalidLink() {
+        assertTrue(Pages.create(URI.create(source), "not a valid link", Page) instanceof LinkError);
+
     }
 
 }

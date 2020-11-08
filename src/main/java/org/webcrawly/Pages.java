@@ -9,12 +9,18 @@ public class Pages {
         Image
     }
 
+    interface PageLink {
+    }
+
     /**
      * the valid link
+     *
      * @param uri an absolute uri
      */
-    public static record Link(URI uri, LinkType type) {
+    public static record Link(URI uri, LinkType type) implements PageLink {
+    }
 
+    public static record LinkError(String url, LinkType type, String error, String errorClass) implements PageLink {
     }
 
     /**
@@ -23,7 +29,7 @@ public class Pages {
      * @param type
      * @return
      */
-    public static Link create(URI source, String url, LinkType type) {
+    public static PageLink create(URI source, String url, LinkType type) {
         return new Link(source.resolve(url), type);
     }
 
