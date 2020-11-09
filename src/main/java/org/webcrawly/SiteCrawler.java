@@ -11,9 +11,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import static org.webcrawly.Functions.rootDomain;
 
@@ -81,6 +78,7 @@ public class SiteCrawler implements PageResultCallback {
                 .filter(uri -> Functions.isInternal(rootDomain, uri))
                 .filter(this::stillToDo)
                 .forEach(uri -> {
+                    System.out.println("exe " + uri);
                     executing.add(uri);
                     submit(uri);
                 });
