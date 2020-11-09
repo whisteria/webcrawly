@@ -1,5 +1,6 @@
-package org.webcrawly;
+package org.webcrawly.crawler;
 
+import org.webcrawly.CrawlerError;
 import org.webcrawly.domain.Pages.*;
 
 import java.io.IOException;

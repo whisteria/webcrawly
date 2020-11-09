@@ -1,7 +1,6 @@
 package org.webcrawly.crawler;
 
 import org.junit.Test;
-import org.webcrawly.MockPageCrawler;
 import org.webcrawly.domain.Links.Link;
 import org.webcrawly.domain.Pages.Page;
 import org.webcrawly.domain.Pages.PageError;
@@ -15,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 import static java.net.URI.create;
 import static org.junit.Assert.assertEquals;
-import static org.webcrawly.MockPageCrawler.NOT_FOUND;
+import static org.webcrawly.crawler.MockPageCrawler.NOT_FOUND;
 import static org.webcrawly.domain.Links.LinkType.ANCHOR;
 import static org.webcrawly.domain.Links.LinkType.MEDIA;
 
@@ -27,13 +26,13 @@ public class SiteCrawlerTest {
             TimeUnit.SECONDS
     );
 
-    private static final URI startUri = URI.create("http://www.webcrawly.com");
-    private static final URI weather = URI.create("http://weather.webcrawly.com");
-    private static final URI news = URI.create("http://news.webcrawly.com");
-    private static final URI newsUsElections = URI.create("http://news.webcrawly.com/us-elections");
-    private static final URI sport = URI.create("http://sport.webcrawly.com");
-    private static final URI weatherLondon = URI.create("http://weather.webcrawly.com/london");
-    private static final URI weatherBrazil = URI.create("http://weather.webcrawly.com/brazil");
+    private static final URI startUri = URI.create("http://www.webcrawly.com/");
+    private static final URI weather = URI.create("http://weather.webcrawly.com/");
+    private static final URI news = URI.create("http://news.webcrawly.com/");
+    private static final URI newsUsElections = URI.create("http://news.webcrawly.com/us-elections/");
+    private static final URI sport = URI.create("http://sport.webcrawly.com/");
+    private static final URI weatherLondon = URI.create("http://weather.webcrawly.com/london/");
+    private static final URI weatherBrazil = URI.create("http://weather.webcrawly.com/brazil/");
 
     private static Link page(String link) {
         return new Link(create(link), ANCHOR);
@@ -74,5 +73,10 @@ public class SiteCrawlerTest {
         );
         assertEquals(expected, SiteCrawler.crawl(startUri, mockFetcher, env).results());
         mockFetcher.assertCalledExactlyOnce(expected.keySet());
+    }
+
+    @Test
+    public void qqq(){
+        System.out.println(mockFetcher);
     }
 }
