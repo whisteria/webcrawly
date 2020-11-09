@@ -52,7 +52,7 @@ public class SiteCrawler implements PageResultCallback {
     }
 
     private void submit(URI uri) {
-        env.submit(() -> pageCrawler.fetch(uri, this));
+        env.submit(() -> pageCrawler.start(uri, this));
     }
 
     @Override

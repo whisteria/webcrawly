@@ -40,9 +40,16 @@ public interface Pages {
     /**
      * a crawler crawls one single page (URI) and calls the callback with the result
      */
-    // todo deal with potential exceptions during crawling
     interface PageCrawler {
-        void fetch(URI uri, PageResultCallback callback);
+        void fetch(URI uri, PageResultCallback callback) throws Exception;
+
+        default void start(URI uri, PageResultCallback callback) {
+            try {
+                fetch(uri, callback);
+            } catch (Exception e) {
+                callback.process(new PageError(uri, CrawlerError.error(e)));
+            }
+        }
     }
 
 }
