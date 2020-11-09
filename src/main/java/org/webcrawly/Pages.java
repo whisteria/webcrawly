@@ -13,19 +13,21 @@ public class Pages {
     }
 
     interface LinkResult {
+        LinkType type();
     }
 
     public static record Error(String error, String errorClass) {
     }
 
     /**
-     * the valid link
-     *
-     * @param uri an absolute uri
+     * represents a valid link
      */
     public static record Link(URI uri, LinkType type) implements LinkResult {
     }
 
+    /**
+     *  represents a link with incorrect syntax
+     */
     public static record LinkError(String url, LinkType type, Error error) implements LinkResult {
     }
 
@@ -50,21 +52,25 @@ public class Pages {
         return InternetDomainName.from(uri.getAuthority()).topPrivateDomain().toString();
     }
 
-
     interface PageResult {
+        URI uri();
     }
 
     /**
      * correspondents to a web page with all its links
      */
-    public static record Page(Set<LinkResult> links) implements PageResult {
+    public static record Page(URI uri, Set<LinkResult> links) implements PageResult {
     }
 
-    public static record PageError(Error error) implements PageResult {
+    public static record PageError(URI uri, Error error) implements PageResult {
+    }
+
+    interface PageResultCallback {
+        void process(PageResult result);
     }
 
     interface PageFetcher {
-        PageResult fetch(String url);
+        void fetch(URI uri, PageResultCallback callback);
     }
 
 }
