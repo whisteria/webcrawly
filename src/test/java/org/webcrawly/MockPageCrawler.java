@@ -1,6 +1,6 @@
 package org.webcrawly;
 
-import org.webcrawly.Pages.*;
+import org.webcrawly.domain.Pages.*;
 
 import java.io.IOException;
 import java.net.URI;

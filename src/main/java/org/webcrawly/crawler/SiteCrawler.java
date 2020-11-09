@@ -1,10 +1,12 @@
-package org.webcrawly;
+package org.webcrawly.crawler;
 
-import org.webcrawly.Links.LinkType;
-import org.webcrawly.Pages.Page;
-import org.webcrawly.Pages.PageCrawler;
-import org.webcrawly.Pages.PageResult;
-import org.webcrawly.Pages.PageResultCallback;
+import org.webcrawly.Functions;
+import org.webcrawly.domain.Links;
+import org.webcrawly.domain.Links.LinkType;
+import org.webcrawly.domain.Pages.Page;
+import org.webcrawly.domain.Pages.PageCrawler;
+import org.webcrawly.domain.Pages.PageResult;
+import org.webcrawly.domain.Pages.PageResultCallback;
 
 import java.net.URI;
 import java.util.HashMap;

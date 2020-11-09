@@ -1,12 +1,13 @@
-package org.webcrawly;
+package org.webcrawly.domain;
 
-import org.webcrawly.Links.LinkResult;
+import org.webcrawly.CrawlerError;
+import org.webcrawly.domain.Links.LinkResult;
 
 import java.net.URI;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
-import static org.webcrawly.Links.toAbsolute;
+import static org.webcrawly.domain.Links.toAbsolute;
 
 public interface Pages {
 

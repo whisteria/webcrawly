@@ -1,4 +1,7 @@
-package org.webcrawly;
+package org.webcrawly.domain;
+
+import org.webcrawly.CrawlerError;
+import org.webcrawly.Functions;
 
 import java.net.URI;
 
@@ -9,7 +12,7 @@ public class Links {
         Image
     }
 
-    interface LinkResult {
+    public interface LinkResult {
         LinkType type();
     }
 
@@ -30,7 +33,7 @@ public class Links {
      * @param source the page where the url was found (needed as the url can be relative)
      * @return a (valid or invalid) link for the url
      */
-    static LinkResult createLink(URI source, String url, LinkType type) {
+    public static LinkResult createLink(URI source, String url, LinkType type) {
         try {
             final URI uri = source.resolve(url);
             // this checks if uri is valid for us
@@ -41,7 +44,7 @@ public class Links {
         }
     }
 
-    static LinkResult toAbsolute(URI uri, LinkResult linkResult) {
+    public static LinkResult toAbsolute(URI uri, LinkResult linkResult) {
         if(linkResult instanceof Link link){
             return new Link(Functions.absolute(uri, link.uri()), link.type());
         }

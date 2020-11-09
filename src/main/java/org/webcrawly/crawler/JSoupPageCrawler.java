@@ -1,19 +1,20 @@
-package org.webcrawly;
+package org.webcrawly.crawler;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.webcrawly.Links.LinkResult;
-import org.webcrawly.Pages.Page;
-import org.webcrawly.Pages.PageCrawler;
-import org.webcrawly.Pages.PageResultCallback;
+import org.webcrawly.domain.Links;
+import org.webcrawly.domain.Links.LinkResult;
+import org.webcrawly.domain.Pages.Page;
+import org.webcrawly.domain.Pages.PageCrawler;
+import org.webcrawly.domain.Pages.PageResultCallback;
 
 import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
-import static org.webcrawly.Links.LinkType.Image;
-import static org.webcrawly.Links.LinkType.Page;
+import static org.webcrawly.domain.Links.LinkType.Image;
+import static org.webcrawly.domain.Links.LinkType.Page;
 
 public class JSoupPageCrawler implements PageCrawler {
 

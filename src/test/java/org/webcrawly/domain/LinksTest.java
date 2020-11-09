@@ -1,16 +1,16 @@
-package org.webcrawly;
+package org.webcrawly.domain;
 
 import org.junit.Test;
-import org.webcrawly.Links.LinkError;
+import org.webcrawly.domain.Links.LinkError;
 
 import java.net.URI;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.webcrawly.Links.Link;
-import static org.webcrawly.Links.LinkType.Image;
-import static org.webcrawly.Links.LinkType.Page;
-import static org.webcrawly.Links.createLink;
+import static org.webcrawly.domain.Links.Link;
+import static org.webcrawly.domain.Links.LinkType.Image;
+import static org.webcrawly.domain.Links.LinkType.Page;
+import static org.webcrawly.domain.Links.createLink;
 
 public class LinksTest {
 

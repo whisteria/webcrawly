@@ -1,10 +1,12 @@
-package org.webcrawly;
+package org.webcrawly.crawler;
 
 import org.junit.Test;
-import org.webcrawly.Links.Link;
-import org.webcrawly.Pages.Page;
-import org.webcrawly.Pages.PageError;
-import org.webcrawly.Pages.PageResult;
+import org.webcrawly.domain.Links;
+import org.webcrawly.domain.Links.Link;
+import org.webcrawly.MockPageCrawler;
+import org.webcrawly.domain.Pages.Page;
+import org.webcrawly.domain.Pages.PageError;
+import org.webcrawly.domain.Pages.PageResult;
 
 import java.net.URI;
 import java.util.Map;

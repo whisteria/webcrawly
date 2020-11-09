@@ -1,8 +1,9 @@
-package org.webcrawly;
+package org.webcrawly.crawler;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
+import org.webcrawly.crawler.JSoupPageCrawler;
 
 import java.util.Set;
 

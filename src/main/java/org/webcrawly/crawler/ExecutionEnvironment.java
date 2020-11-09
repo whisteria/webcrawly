@@ -1,4 +1,4 @@
-package org.webcrawly;
+package org.webcrawly.crawler;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
