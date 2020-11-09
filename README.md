@@ -1,6 +1,6 @@
 ## summary
 Little java program to web-crawl a domain.
-it uses java 14 with enabled feature preview to get the benefit of some a newer java version, in particular records.
+it uses java 14 with enabled feature preview to get the benefit of a newer java version, in particular records.
 
 ## design rationales
 - small classes with well-defined concerns
