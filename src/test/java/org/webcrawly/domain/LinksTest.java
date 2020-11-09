@@ -8,8 +8,8 @@ import java.net.URI;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.webcrawly.domain.Links.Link;
-import static org.webcrawly.domain.Links.LinkType.Image;
-import static org.webcrawly.domain.Links.LinkType.Page;
+import static org.webcrawly.domain.Links.LinkType.ANCHOR;
+import static org.webcrawly.domain.Links.LinkType.MEDIA;
 import static org.webcrawly.domain.Links.createLink;
 
 public class LinksTest {
@@ -22,15 +22,15 @@ public class LinksTest {
 
     @Test
     public void createValidLink() {
-        assertEquals(new Link(URI.create(news), Page), createLink(URI.create(source), news, Page));
-        assertEquals(new Link(URI.create(source + logo), Image), createLink(URI.create(source), logo, Image));
-        assertEquals(new Link(URI.create(news + logo), Image), createLink(URI.create(newsIndex), logo, Image));
-        assertEquals(new Link(URI.create(external + logo), Page), createLink(URI.create(external), logo, Page));
+        assertEquals(new Link(URI.create(news), ANCHOR), createLink(URI.create(source), news, ANCHOR));
+        assertEquals(new Link(URI.create(source + logo), MEDIA), createLink(URI.create(source), logo, MEDIA));
+        assertEquals(new Link(URI.create(news + logo), MEDIA), createLink(URI.create(newsIndex), logo, MEDIA));
+        assertEquals(new Link(URI.create(external + logo), ANCHOR), createLink(URI.create(external), logo, ANCHOR));
     }
 
     @Test
     public void createInvalidLink() {
-        assertTrue(createLink(URI.create(source), "not a valid link", Page) instanceof LinkError);
+        assertTrue(createLink(URI.create(source), "not a valid link", ANCHOR) instanceof LinkError);
     }
 
 }

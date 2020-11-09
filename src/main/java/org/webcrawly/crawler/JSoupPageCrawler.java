@@ -13,17 +13,17 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
-import static org.webcrawly.domain.Links.LinkType.Image;
-import static org.webcrawly.domain.Links.LinkType.Page;
+import static org.webcrawly.domain.Links.LinkType.ANCHOR;
+import static org.webcrawly.domain.Links.LinkType.MEDIA;
 
 public class JSoupPageCrawler implements PageCrawler {
 
-    static Set<String> getLinks(Document document) {
+    static Set<String> getAnchors(Document document) {
         return document.select("a[href]").stream().map(n -> n.attr("href")).collect(toSet());
     }
 
-    static Set<String> getImages(Document document) {
-        return document.select("img").stream().map(n -> n.attr("src")).collect(toSet());
+    static Set<String> getMedia(Document document) {
+        return document.select("[src]").stream().map(n -> n.attr("src")).collect(toSet());
     }
 
     @Override
@@ -31,8 +31,8 @@ public class JSoupPageCrawler implements PageCrawler {
         // todo millis are hard coded
         final Document document = Jsoup.parse(uri.toURL(), 1000);
         final Set<LinkResult> links = new HashSet<>();
-        getLinks(document).forEach(url -> links.add(Links.createLink(uri, url, Page)));
-        getImages(document).forEach(url -> links.add(Links.createLink(uri, url, Image)));
+        getAnchors(document).forEach(url -> links.add(Links.createLink(uri, url, ANCHOR)));
+        getMedia(document).forEach(url -> links.add(Links.createLink(uri, url, MEDIA)));
         callback.process(new Page(uri, links));
     }
 }

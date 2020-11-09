@@ -8,8 +8,9 @@ import java.net.URI;
 public class Links {
 
     public enum LinkType {
-        Page,
-        Image
+        ANCHOR,
+        MEDIA,
+        // todo are more, for example Link, Base, Area can have a 'href'
     }
 
     public interface LinkResult {
@@ -45,7 +46,7 @@ public class Links {
     }
 
     public static LinkResult toAbsolute(URI uri, LinkResult linkResult) {
-        if(linkResult instanceof Link link){
+        if (linkResult instanceof Link link) {
             return new Link(Functions.absolute(uri, link.uri()), link.type());
         }
         return linkResult;

@@ -2,7 +2,6 @@ package org.webcrawly.crawler;
 
 import org.webcrawly.Functions;
 import org.webcrawly.domain.Links;
-import org.webcrawly.domain.Links.LinkType;
 import org.webcrawly.domain.Pages.Page;
 import org.webcrawly.domain.Pages.PageCrawler;
 import org.webcrawly.domain.Pages.PageResult;
@@ -15,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.webcrawly.Functions.rootDomain;
+import static org.webcrawly.domain.Links.LinkType.ANCHOR;
 
 /**
  * the site crawler
@@ -44,18 +44,19 @@ public class SiteCrawler implements PageResultCallback {
 
 
     private CrawlerResult execute() {
-        submit(startUri);;
-        return new CrawlerResult(result, env.await());
+        submit(startUri);
+        final boolean await = env.await();
+        return new CrawlerResult(result, await);
     }
 
     private void submit(URI uri) {
-        executing.add(uri.normalize());
+        executing.add(uri);
         env.submit(() -> pageCrawler.start(uri, this));
     }
 
     @Override
     public synchronized void process(PageResult pageResult) {
-        if (executing.remove(pageResult.uri().normalize())) {
+        if (executing.remove(pageResult.uri())) {
             result.put(pageResult.uri(), pageResult);
             if (pageResult instanceof Page page) {
                 submitMissingResources(page);
@@ -73,10 +74,11 @@ public class SiteCrawler implements PageResultCallback {
     private void submitMissingResources(Page page) {
         page.links()
                 .stream()
-                .filter(linkResult -> LinkType.Page.equals(linkResult.type()))
+                .filter(linkResult -> ANCHOR.equals(linkResult.type()))
                 .filter(linkResult -> linkResult instanceof Links.Link)
                 .map(linkResult -> ((Links.Link) linkResult).uri())
                 .filter(uri -> Functions.isInternal(rootDomain, uri))
+                // todo filter http
                 .map(Functions::crawlerUri)
                 .filter(this::stillToDo)
                 .forEach(this::submit);

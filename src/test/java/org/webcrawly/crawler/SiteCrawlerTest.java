@@ -1,9 +1,8 @@
 package org.webcrawly.crawler;
 
 import org.junit.Test;
-import org.webcrawly.domain.Links;
-import org.webcrawly.domain.Links.Link;
 import org.webcrawly.MockPageCrawler;
+import org.webcrawly.domain.Links.Link;
 import org.webcrawly.domain.Pages.Page;
 import org.webcrawly.domain.Pages.PageError;
 import org.webcrawly.domain.Pages.PageResult;
@@ -17,6 +16,8 @@ import java.util.concurrent.TimeUnit;
 import static java.net.URI.create;
 import static org.junit.Assert.assertEquals;
 import static org.webcrawly.MockPageCrawler.NOT_FOUND;
+import static org.webcrawly.domain.Links.LinkType.ANCHOR;
+import static org.webcrawly.domain.Links.LinkType.MEDIA;
 
 public class SiteCrawlerTest {
 
@@ -35,20 +36,20 @@ public class SiteCrawlerTest {
     private static final URI weatherBrazil = URI.create("http://weather.webcrawly.com/brazil");
 
     private static Link page(String link) {
-        return new Link(create(link), Links.LinkType.Page);
+        return new Link(create(link), ANCHOR);
     }
 
-    private static Link img(String link) {
-        return new Link(create(link), Links.LinkType.Image);
+    private static Link media(String link) {
+        return new Link(create(link), MEDIA);
     }
 
     private static final Map<URI, Page> worldWideWeb = Map.of(
             startUri,
             new Page(startUri, Set.of(page("http://weather.webcrawly.com"), page("http://news.webcrawly.com"), page("http://sport.webcrawly.com"))),
             weather,
-            new Page(weather, Set.of(img("/weather.png"), page("http://www.webcrawly.com"), page("http://weather.webcrawly.com/brazil"), page("/london"))),
+            new Page(weather, Set.of(media("/weather.png"), page("http://www.webcrawly.com"), page("http://weather.webcrawly.com/brazil"), page("/london"))),
             news,
-            new Page(news, Set.of(img("/news.png"), page("http://www.webcrawly.com"), page("http://news.webcrawly.com/us-elections"), page("http://bloomberg.com")))
+            new Page(news, Set.of(media("/news.png"), page("http://www.webcrawly.com"), page("http://news.webcrawly.com/us-elections"), page("http://bloomberg.com")))
     );
 
     private final static MockPageCrawler mockFetcher = new MockPageCrawler(worldWideWeb);
@@ -59,9 +60,9 @@ public class SiteCrawlerTest {
                 startUri,
                 new Page(startUri, Set.of(page("http://weather.webcrawly.com"), page("http://news.webcrawly.com"), page("http://sport.webcrawly.com"))),
                 weather,
-                new Page(weather, Set.of(img("/weather.png"), page("http://www.webcrawly.com"), page("http://weather.webcrawly.com/brazil"), page("/london"))),
+                new Page(weather, Set.of(media("/weather.png"), page("http://www.webcrawly.com"), page("http://weather.webcrawly.com/brazil"), page("/london"))),
                 news,
-                new Page(news, Set.of(img("/news.png"), page("http://www.webcrawly.com"), page("http://news.webcrawly.com/us-elections"), page("http://bloomberg.com"))),
+                new Page(news, Set.of(media("/news.png"), page("http://www.webcrawly.com"), page("http://news.webcrawly.com/us-elections"), page("http://bloomberg.com"))),
                 weatherLondon,
                 new PageError(weatherLondon, NOT_FOUND),
                 weatherBrazil,

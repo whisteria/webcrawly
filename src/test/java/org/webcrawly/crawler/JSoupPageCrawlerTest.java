@@ -3,7 +3,6 @@ package org.webcrawly.crawler;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
-import org.webcrawly.crawler.JSoupPageCrawler;
 
 import java.util.Set;
 
@@ -28,15 +27,15 @@ public class JSoupPageCrawlerTest {
                 "https://www.bbc.co.uk/sport",
                 "https://www.bbc.co.uk/weather"
         );
-        assertEquals(expected, JSoupPageCrawler.getLinks(document));
+        assertEquals(expected, JSoupPageCrawler.getAnchors(document));
     }
 
     @Test
-    public void getImages() {
+    public void getMedia() {
         final Set<String> expected = Set.of(
                 "img1.jpg",
                 "index/img2.jpg"
         );
-        assertEquals(expected, JSoupPageCrawler.getImages(document));
+        assertEquals(expected, JSoupPageCrawler.getMedia(document));
     }
 }
