@@ -43,10 +43,9 @@ public class SiteCrawler implements PageResultCallback {
     }
 
 
-    private Map<URI, PageResult> execute() {
-        submit(startUri);
-        env.await();
-        return result;
+    private CrawlerResult execute() {
+        submit(startUri);;
+        return new CrawlerResult(result, env.await());
     }
 
     private void submit(URI uri) {
@@ -90,7 +89,7 @@ public class SiteCrawler implements PageResultCallback {
     /**
      * public method to trigger the crawl
      */
-    public static Map<URI, PageResult> crawl(URI startUri, PageCrawler fetcher, ExecutionEnvironment env) {
+    public static CrawlerResult crawl(URI startUri, PageCrawler fetcher, ExecutionEnvironment env) {
         return new SiteCrawler(startUri, fetcher, env).execute();
     }
 

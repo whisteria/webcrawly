@@ -71,7 +71,7 @@ public class SiteCrawlerTest {
                 newsUsElections,
                 new PageError(newsUsElections, NOT_FOUND)
         );
-        assertEquals(expected, SiteCrawler.crawl(startUri, mockFetcher, env));
+        assertEquals(expected, SiteCrawler.crawl(startUri, mockFetcher, env).results());
         mockFetcher.assertCalledExactlyOnce(expected.keySet());
     }
 }
