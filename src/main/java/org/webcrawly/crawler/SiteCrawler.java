@@ -30,6 +30,7 @@ public class SiteCrawler implements PageResultCallback {
     // mutable state
     private final Set<URI> executing = new HashSet<>();
     private final Map<URI, PageResult> result = new HashMap<>();
+    private int counter = 0;
 
     /**
      * stateful class so we need ot use one instance per execution.
@@ -56,6 +57,10 @@ public class SiteCrawler implements PageResultCallback {
 
     @Override
     public synchronized void process(PageResult pageResult) {
+        counter++;
+        if (counter % 10 == 0) {
+            System.out.print('.');
+        }
         if (executing.remove(pageResult.uri())) {
             result.put(pageResult.uri(), pageResult);
             if (pageResult instanceof Page page) {
@@ -78,7 +83,7 @@ public class SiteCrawler implements PageResultCallback {
                 .filter(linkResult -> linkResult instanceof Links.Link)
                 .map(linkResult -> ((Links.Link) linkResult).uri())
                 .filter(uri -> Functions.isInternal(rootDomain, uri))
-                // todo filter http
+                .filter(Functions::isHttp)
                 .map(Functions::crawlerUri)
                 .filter(this::stillToDo)
                 .forEach(this::submit);

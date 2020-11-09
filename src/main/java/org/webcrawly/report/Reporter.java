@@ -1,4 +1,7 @@
 package org.webcrawly.report;
 
-public class Reporter {
+import org.webcrawly.crawler.CrawlerResult;
+
+public interface Reporter {
+    void report(CrawlerResult result);
 }
