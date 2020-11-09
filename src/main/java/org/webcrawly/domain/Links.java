@@ -36,7 +36,7 @@ public class Links {
      */
     public static LinkResult createLink(URI source, String url, LinkType type) {
         try {
-            final URI uri = source.resolve(url);
+            final URI uri = source.resolve(url).normalize();
             // this checks if uri is valid for us
             uri.toURL();
             return new Link(uri, type);

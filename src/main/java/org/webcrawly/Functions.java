@@ -25,7 +25,11 @@ public interface Functions {
      * @return URI without query and fragments
      */
     static URI crawlerUri(URI uri) {
-        return URI.create(String.format("%s://%s%s", uri.getScheme(), uri.getAuthority(), uri.getPath()));
+        String url = String.format("%s://%s%s", uri.getScheme(), uri.getAuthority(), uri.getPath());
+        if (!url.endsWith("/")) {
+            url += "/";
+        }
+        return URI.create(url);
     }
 
     static boolean isHttp(URI uri) {
