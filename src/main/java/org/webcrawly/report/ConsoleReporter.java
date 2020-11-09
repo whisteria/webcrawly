@@ -36,7 +36,7 @@ public class ConsoleReporter implements Reporter {
 
     private Object showLink(LinkResult linkResult) {
         if (linkResult instanceof Link link) {
-            return link.uri();
+            return "❇️ " +link.uri();
         } else {
             return "❌ " + linkResult;
         }

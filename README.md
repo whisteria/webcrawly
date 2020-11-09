@@ -28,7 +28,7 @@ there is currently a (generous) timeout (2m) hardcoded in the main class.
 ## further todos
 - increase test coverage
 - add logging
-- some invalid urls could mbe fixed via url encoding, they currently fail
+- some invalid urls could be fixed via url encoding, they currently fail (but are external anyway)
 - not all possible httml links are processed
     - for example `<link>` and `<base>` are ignored
     - java script sources are tagged as media
