@@ -25,9 +25,8 @@ public class SiteCrawler implements PageResultCallback {
     private final URI startUri;
     private final String rootDomain;
     private final PageCrawler pageCrawler;
+    private final ExecutionEnvironment env;
 
-    // todo hard coded
-    private final ExecutorService executorService = Executors.newFixedThreadPool(5);
 
     // mutable state
     private final Set<URI> executing = new HashSet<>();
@@ -37,27 +36,23 @@ public class SiteCrawler implements PageResultCallback {
      * stateful class so we need ot use one instance per execution.
      * this is ensured by this private constructor
      */
-    private SiteCrawler(URI startUri, PageCrawler pageCrawler) {
+    private SiteCrawler(URI startUri, PageCrawler pageCrawler, ExecutionEnvironment env) {
         this.startUri = startUri;
         this.rootDomain = rootDomain(startUri);
         this.pageCrawler = pageCrawler;
+        this.env = env;
     }
 
 
     private Map<URI, PageResult> execute() {
         executing.add(startUri);
         submit(startUri);
-        // todo hard coded
-        try {
-            executorService.awaitTermination(1, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            // todo
-        }
+        env.await();
         return result;
     }
 
     private void submit(URI uri) {
-        executorService.submit(() -> pageCrawler.fetch(uri, this));
+        env.submit(() -> pageCrawler.fetch(uri, this));
     }
 
     @Override
@@ -73,7 +68,7 @@ public class SiteCrawler implements PageResultCallback {
 
     private void checkCompletion() {
         if (executing.isEmpty()) {
-            executorService.shutdown();
+            env.shutdown();
         }
     }
 
@@ -98,8 +93,8 @@ public class SiteCrawler implements PageResultCallback {
     /**
      * public method to trigger the crawl
      */
-    public static Map<URI, PageResult> crawl(URI startUri, PageCrawler fetcher) {
-        return new SiteCrawler(startUri, fetcher).execute();
+    public static Map<URI, PageResult> crawl(URI startUri, PageCrawler fetcher, ExecutionEnvironment env) {
+        return new SiteCrawler(startUri, fetcher, env).execute();
     }
 
 }

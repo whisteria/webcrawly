@@ -9,12 +9,20 @@ import org.webcrawly.Pages.PageResult;
 import java.net.URI;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static java.net.URI.create;
 import static org.junit.Assert.assertEquals;
 import static org.webcrawly.MockCrawler.NOT_FOUND;
 
 public class SiteCrawlerTest {
+
+    private static final ExecutionEnvironment env = new ExecutionEnvironment(
+            Executors.newFixedThreadPool(3),
+            1,
+            TimeUnit.SECONDS
+    );
 
     private static final URI startUri = URI.create("http://www.webcrawly.com");
     private static final URI weather = URI.create("http://weather.webcrawly.com");
@@ -61,7 +69,7 @@ public class SiteCrawlerTest {
                 newsUsElections,
                 new PageError(newsUsElections, NOT_FOUND)
         );
-        assertEquals(expected, SiteCrawler.crawl(startUri, mockFetcher));
+        assertEquals(expected, SiteCrawler.crawl(startUri, mockFetcher, env));
         mockFetcher.assertCalledExactlyOnce(expected.keySet());
     }
 }
