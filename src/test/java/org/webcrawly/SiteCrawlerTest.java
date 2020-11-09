@@ -1,7 +1,7 @@
 package org.webcrawly;
 
 import org.junit.Test;
-import org.webcrawly.Pages.Link;
+import org.webcrawly.Links.Link;
 import org.webcrawly.Pages.Page;
 import org.webcrawly.Pages.PageError;
 import org.webcrawly.Pages.PageResult;
@@ -12,9 +12,9 @@ import java.util.Set;
 
 import static java.net.URI.create;
 import static org.junit.Assert.assertEquals;
-import static org.webcrawly.MockFetcher.NOT_FOUND;
+import static org.webcrawly.MockCrawler.NOT_FOUND;
 
-public class CrawlerTest {
+public class SiteCrawlerTest {
 
     private static final URI startUri = URI.create("http://www.webcrawly.com");
     private static final URI weather = URI.create("http://weather.webcrawly.com");
@@ -25,11 +25,11 @@ public class CrawlerTest {
     private static final URI weatherBrazil = URI.create("http://weather.webcrawly.com/brazil");
 
     private static Link page(String link) {
-        return new Link(create(link), Pages.LinkType.Page);
+        return new Link(create(link), Links.LinkType.Page);
     }
 
     private static Link img(String link) {
-        return new Link(create(link), Pages.LinkType.Image);
+        return new Link(create(link), Links.LinkType.Image);
     }
 
     private static final Map<URI, Page> worldWideWeb = Map.of(
@@ -41,7 +41,7 @@ public class CrawlerTest {
             new Page(news, Set.of(img("/news.png"), page("http://www.webcrawly.com"), page("http://news.webcrawly.com/us-elections"), page("http://bloomberg.com")))
     );
 
-    private final static MockFetcher mockFetcher = new MockFetcher(worldWideWeb);
+    private final static MockCrawler mockFetcher = new MockCrawler(worldWideWeb);
 
     @Test
     public void crawl() {
@@ -61,7 +61,7 @@ public class CrawlerTest {
                 newsUsElections,
                 new PageError(newsUsElections, NOT_FOUND)
         );
-        assertEquals(expected, Crawler.crawl(startUri, mockFetcher));
+        assertEquals(expected, SiteCrawler.crawl(startUri, mockFetcher));
         mockFetcher.assertCalledExactlyOnce(expected.keySet());
     }
 }

@@ -1,75 +1,47 @@
 package org.webcrawly;
 
-import com.google.common.net.InternetDomainName;
+import org.webcrawly.Links.LinkResult;
 
 import java.net.URI;
 import java.util.Set;
 
-public class Pages {
+import static java.util.stream.Collectors.toSet;
+import static org.webcrawly.Links.toAbsolute;
 
-    public enum LinkType {
-        Page,
-        Image
-    }
-
-    interface LinkResult {
-        LinkType type();
-    }
-
-    public static record Error(String error, String errorClass) {
-    }
-
-    /**
-     * represents a valid link
-     */
-    public static record Link(URI uri, LinkType type) implements LinkResult {
-    }
-
-    /**
-     *  represents a link with incorrect syntax
-     */
-    public static record LinkError(String url, LinkType type, Error error) implements LinkResult {
-    }
-
-    /**
-     * @param source the page where the url was found
-     * @param url
-     * @param type
-     * @return
-     */
-    public static LinkResult create(URI source, String url, LinkType type) {
-        try {
-            final URI uri = source.resolve(url);
-            // this checks if uri is valid for us
-            uri.toURL();
-            return new Link(uri, type);
-        } catch (Exception e) {
-            return new LinkError(url, type, new Error(e.getMessage(), e.getClass().getSimpleName()));
-        }
-    }
-
-    static String rootDomain(URI uri) {
-        return InternetDomainName.from(uri.getAuthority()).topPrivateDomain().toString();
-    }
+public interface Pages {
 
     interface PageResult {
         URI uri();
     }
 
     /**
-     * correspondents to a web page with all its links
+     * represents a web page with all its links
+     * valid links will be converted to absolute links if needed
      */
-    public static record Page(URI uri, Set<LinkResult> links) implements PageResult {
+    record Page(URI uri, Set<LinkResult> links) implements PageResult {
+
+        public Page {
+            this.uri = uri;
+            this.links = links.stream().map(link -> toAbsolute(uri, link)).collect(toSet());
+        }
+
     }
 
-    public static record PageError(URI uri, Error error) implements PageResult {
+    /**
+     * represents a page which could not be crawled
+     */
+    record PageError(URI uri, CrawlerError error) implements PageResult {
     }
 
     interface PageResultCallback {
         void process(PageResult result);
     }
 
-    interface PageFetcher {
+    /**
+     * a crawler crawls one single page (URI) and calls the callback with the result
+     */
+    // todo deal with potential exceptions during crawling
+    interface PageCrawler {
         void fetch(URI uri, PageResultCallback callback);
     }
 

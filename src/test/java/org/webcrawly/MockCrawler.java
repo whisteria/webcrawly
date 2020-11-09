@@ -1,6 +1,5 @@
 package org.webcrawly;
 
-import org.webcrawly.Pages.Error;
 import org.webcrawly.Pages.*;
 
 import java.io.IOException;
@@ -11,16 +10,16 @@ import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
-public class MockFetcher implements PageFetcher {
+public class MockCrawler implements PageCrawler {
 
-    public static final Error NOT_FOUND = new Error("not found", IOException.class.getSimpleName());
+    public static final CrawlerError NOT_FOUND = new CrawlerError("not found", IOException.class.getSimpleName());
 
     private final Map<URI, Page> worldWideWeb;
 
     // to ensure we are called max once per URI
     final Map<URI, Integer> counts = new HashMap<>();
 
-    public MockFetcher(Map<URI, Page> worldWideWeb) {
+    public MockCrawler(Map<URI, Page> worldWideWeb) {
         this.worldWideWeb = worldWideWeb;
     }
 

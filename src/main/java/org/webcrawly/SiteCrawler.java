@@ -1,6 +1,10 @@
 package org.webcrawly;
 
-import org.webcrawly.Pages.*;
+import org.webcrawly.Links.LinkType;
+import org.webcrawly.Pages.Page;
+import org.webcrawly.Pages.PageCrawler;
+import org.webcrawly.Pages.PageResult;
+import org.webcrawly.Pages.PageResultCallback;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -11,11 +15,16 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class Crawler implements PageResultCallback {
+import static org.webcrawly.Functions.rootDomain;
+
+/**
+ * the site crawler
+ */
+public class SiteCrawler implements PageResultCallback {
 
     private final URI startUri;
     private final String rootDomain;
-    private final PageFetcher pageFetcher;
+    private final PageCrawler pageCrawler;
 
     // todo hard coded
     private final ExecutorService executorService = Executors.newFixedThreadPool(5);
@@ -24,10 +33,14 @@ public class Crawler implements PageResultCallback {
     private final Set<URI> executing = new HashSet<>();
     private final Map<URI, PageResult> result = new HashMap<>();
 
-    private Crawler(URI startUri, PageFetcher pageFetcher) {
+    /**
+     * stateful class so we need ot use one instance per execution.
+     * this is ensured by this private constructor
+     */
+    private SiteCrawler(URI startUri, PageCrawler pageCrawler) {
         this.startUri = startUri;
-        this.rootDomain = Pages.rootDomain(startUri);
-        this.pageFetcher = pageFetcher;
+        this.rootDomain = rootDomain(startUri);
+        this.pageCrawler = pageCrawler;
     }
 
 
@@ -44,7 +57,7 @@ public class Crawler implements PageResultCallback {
     }
 
     private void submit(URI uri) {
-        executorService.submit(() -> pageFetcher.fetch(uri, this));
+        executorService.submit(() -> pageCrawler.fetch(uri, this));
     }
 
     @Override
@@ -68,10 +81,9 @@ public class Crawler implements PageResultCallback {
         page.links()
                 .stream()
                 .filter(linkResult -> LinkType.Page.equals(linkResult.type()))
-                .filter(linkResult -> linkResult instanceof Link)
-                .map(linkResult -> ((Link) linkResult).uri())
-                .map(uri -> absolute(page.uri(), uri))
-                .filter(this::isInternal)
+                .filter(linkResult -> linkResult instanceof Links.Link)
+                .map(linkResult -> ((Links.Link) linkResult).uri())
+                .filter(uri -> Functions.isInternal(rootDomain, uri))
                 .filter(this::stillToDo)
                 .forEach(uri -> {
                     executing.add(uri);
@@ -79,19 +91,15 @@ public class Crawler implements PageResultCallback {
                 });
     }
 
-    private boolean isInternal(URI uri) {
-        return rootDomain.equals(Pages.rootDomain(uri));
-    }
-
     private boolean stillToDo(URI uri) {
         return !result.containsKey(uri) && !executing.contains(uri);
     }
 
-    public static Map<URI, PageResult> crawl(URI startUri, PageFetcher fetcher) {
-        return new Crawler(startUri, fetcher).execute();
+    /**
+     * public method to trigger the crawl
+     */
+    public static Map<URI, PageResult> crawl(URI startUri, PageCrawler fetcher) {
+        return new SiteCrawler(startUri, fetcher).execute();
     }
 
-    public static URI absolute(URI base, URI uri) {
-        return base.resolve(uri);
-    }
 }
