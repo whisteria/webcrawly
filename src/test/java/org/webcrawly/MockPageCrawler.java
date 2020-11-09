@@ -10,7 +10,7 @@ import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
-public class MockCrawler implements PageCrawler {
+public class MockPageCrawler implements PageCrawler {
 
     public static final CrawlerError NOT_FOUND = new CrawlerError("not found", IOException.class.getSimpleName());
 
@@ -19,7 +19,7 @@ public class MockCrawler implements PageCrawler {
     // to ensure we are called max once per URI
     final Map<URI, Integer> counts = new HashMap<>();
 
-    public MockCrawler(Map<URI, Page> worldWideWeb) {
+    public MockPageCrawler(Map<URI, Page> worldWideWeb) {
         this.worldWideWeb = worldWideWeb;
     }
 

@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 import static java.net.URI.create;
 import static org.junit.Assert.assertEquals;
-import static org.webcrawly.MockCrawler.NOT_FOUND;
+import static org.webcrawly.MockPageCrawler.NOT_FOUND;
 
 public class SiteCrawlerTest {
 
@@ -49,7 +49,7 @@ public class SiteCrawlerTest {
             new Page(news, Set.of(img("/news.png"), page("http://www.webcrawly.com"), page("http://news.webcrawly.com/us-elections"), page("http://bloomberg.com")))
     );
 
-    private final static MockCrawler mockFetcher = new MockCrawler(worldWideWeb);
+    private final static MockPageCrawler mockFetcher = new MockPageCrawler(worldWideWeb);
 
     @Test
     public void crawl() {
