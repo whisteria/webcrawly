@@ -17,4 +17,8 @@ public interface Functions {
     static URI absolute(URI base, URI uri) {
         return base.resolve(uri);
     }
+
+    static URI crawlerUri( URI uri) {
+        return null;
+    }
 }

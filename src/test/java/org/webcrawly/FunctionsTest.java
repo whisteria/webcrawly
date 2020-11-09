@@ -32,4 +32,14 @@ public class FunctionsTest {
                 Functions.absolute(URI.create("http://abc.com/sport.html"), URI.create("index/main.png"))
         );
     }
+
+
+    @Test
+    public void crawlerUri() {
+
+        assertEquals(
+                URI.create("http://www.ts.de/suchergebnis/"),
+                Functions.crawlerUri(URI.create("http://www.ts.de/suchergebnis/?search-ressort=2984&search-day=20200722"))
+        );
+    }
 }
