@@ -18,7 +18,10 @@ public interface Functions {
         return base.resolve(uri);
     }
 
+    /**
+     * @return URI without query and fragments
+     */
     static URI crawlerUri( URI uri) {
-        return null;
+        return URI.create(String.format("%s://%s%s", uri.getScheme(), uri.getAuthority(), uri.getPath()));
     }
 }

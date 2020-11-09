@@ -42,19 +42,19 @@ public class SiteCrawler implements PageResultCallback {
 
 
     private Map<URI, PageResult> execute() {
-        executing.add(startUri);
         submit(startUri);
         env.await();
         return result;
     }
 
     private void submit(URI uri) {
+        executing.add(uri.normalize());
         env.submit(() -> pageCrawler.start(uri, this));
     }
 
     @Override
     public synchronized void process(PageResult pageResult) {
-        if (executing.remove(pageResult.uri())) {
+        if (executing.remove(pageResult.uri().normalize())) {
             result.put(pageResult.uri(), pageResult);
             if (pageResult instanceof Page page) {
                 submitMissingResources(page);
@@ -76,12 +76,9 @@ public class SiteCrawler implements PageResultCallback {
                 .filter(linkResult -> linkResult instanceof Links.Link)
                 .map(linkResult -> ((Links.Link) linkResult).uri())
                 .filter(uri -> Functions.isInternal(rootDomain, uri))
+                .map(Functions::crawlerUri)
                 .filter(this::stillToDo)
-                .forEach(uri -> {
-                    System.out.println("exe " + uri);
-                    executing.add(uri);
-                    submit(uri);
-                });
+                .forEach(this::submit);
     }
 
     private boolean stillToDo(URI uri) {
