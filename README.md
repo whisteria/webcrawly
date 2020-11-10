@@ -32,4 +32,5 @@ there is currently a (generous) timeout (2m) hardcoded in the main class.
 - not all possible httml links are processed
     - for example `<link>` and `<base>` are ignored
     - java script sources are tagged as media
+- Link/Page creation needs some consolidation
 - output file rather than the console
