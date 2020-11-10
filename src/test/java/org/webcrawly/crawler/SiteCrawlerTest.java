@@ -75,8 +75,4 @@ public class SiteCrawlerTest {
         mockFetcher.assertCalledExactlyOnce(expected.keySet());
     }
 
-    @Test
-    public void qqq(){
-        System.out.println(mockFetcher);
-    }
 }
