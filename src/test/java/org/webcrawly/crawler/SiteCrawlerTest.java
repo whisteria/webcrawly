@@ -1,18 +1,18 @@
 package org.webcrawly.crawler;
 
 import org.junit.Test;
-import org.webcrawly.domain.Links.Link;
 import org.webcrawly.domain.Pages.Page;
 import org.webcrawly.domain.Pages.PageError;
 import org.webcrawly.domain.Pages.PageResult;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
-import static java.net.URI.create;
 import static org.junit.Assert.assertEquals;
 import static org.webcrawly.crawler.MockPageCrawler.NOT_FOUND;
 import static org.webcrawly.domain.Links.LinkType.ANCHOR;
@@ -34,21 +34,17 @@ public class SiteCrawlerTest {
     private static final URI weatherLondon = URI.create("http://weather.webcrawly.com/london/");
     private static final URI weatherBrazil = URI.create("http://weather.webcrawly.com/brazil/");
 
-    private static Link page(String link) {
-        return new Link(create(link), ANCHOR);
-    }
 
-    private static Link media(String link) {
-        return new Link(create(link), MEDIA);
+    private static Set<String> toSet(String... links) {
+        return Arrays.stream(links).collect(Collectors.toSet());
     }
 
     private static final Map<URI, Page> worldWideWeb = Map.of(
-            startUri,
-            new Page(startUri, Set.of(page("http://weather.webcrawly.com"), page("http://news.webcrawly.com"), page("http://sport.webcrawly.com"))),
-            weather,
-            new Page(weather, Set.of(media("/weather.png"), page("http://www.webcrawly.com"), page("http://weather.webcrawly.com/brazil"), page("/london"))),
-            news,
-            new Page(news, Set.of(media("/news.png"), page("http://www.webcrawly.com"), page("http://news.webcrawly.com/us-elections"), page("http://bloomberg.com")))
+            startUri, new Page(startUri, Map.of(ANCHOR, toSet("http://weather.webcrawly.com", "http://news.webcrawly.com", "http://sport.webcrawly.com"))),
+            weather, new Page(weather, Map.of(ANCHOR, toSet("http://www.webcrawly.com", "http://weather.webcrawly.com/brazil", "/london"),
+                    MEDIA, toSet("/weather.png"))),
+            news, new Page(news, Map.of(ANCHOR, toSet("http://www.webcrawly.com", "http://news.webcrawly.com/us-elections", "http://bloomberg.com"),
+                    MEDIA, toSet("/news.png")))
     );
 
     private final static MockPageCrawler mockFetcher = new MockPageCrawler(worldWideWeb);
@@ -57,11 +53,13 @@ public class SiteCrawlerTest {
     public void crawl() {
         Map<URI, PageResult> expected = Map.of(
                 startUri,
-                new Page(startUri, Set.of(page("http://weather.webcrawly.com"), page("http://news.webcrawly.com"), page("http://sport.webcrawly.com"))),
+                new Page(startUri, Map.of(ANCHOR, toSet("http://weather.webcrawly.com", "http://news.webcrawly.com", "http://sport.webcrawly.com"))),
                 weather,
-                new Page(weather, Set.of(media("/weather.png"), page("http://www.webcrawly.com"), page("http://weather.webcrawly.com/brazil"), page("/london"))),
+                new Page(weather, Map.of(ANCHOR, toSet("http://www.webcrawly.com", "http://weather.webcrawly.com/brazil", "/london"),
+                        MEDIA, toSet("/weather.png"))),
                 news,
-                new Page(news, Set.of(media("/news.png"), page("http://www.webcrawly.com"), page("http://news.webcrawly.com/us-elections"), page("http://bloomberg.com"))),
+                new Page(news, Map.of(ANCHOR, toSet("http://www.webcrawly.com", "http://news.webcrawly.com/us-elections", "http://bloomberg.com"),
+                        MEDIA, toSet("/news.png"))),
                 weatherLondon,
                 new PageError(weatherLondon, NOT_FOUND),
                 weatherBrazil,

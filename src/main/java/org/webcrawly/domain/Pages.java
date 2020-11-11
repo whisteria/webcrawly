@@ -1,13 +1,11 @@
 package org.webcrawly.domain;
 
 import org.webcrawly.CrawlerError;
-import org.webcrawly.domain.Links.LinkResult;
+import org.webcrawly.domain.Links.LinkType;
 
 import java.net.URI;
+import java.util.Map;
 import java.util.Set;
-
-import static java.util.stream.Collectors.toSet;
-import static org.webcrawly.domain.Links.toAbsolute;
 
 public interface Pages {
 
@@ -16,16 +14,9 @@ public interface Pages {
     }
 
     /**
-     * represents a web page with all its links
-     * valid links will be converted to absolute links if needed
+     * represents a web page with all its links by type
      */
-    record Page(URI uri, Set<LinkResult> links) implements PageResult {
-
-        public Page {
-            this.uri = uri;
-            this.links = links.stream().map(link -> toAbsolute(uri, link)).collect(toSet());
-        }
-
+    record Page(URI uri, Map<LinkType, Set<String>> links) implements PageResult {
     }
 
     /**

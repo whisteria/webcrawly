@@ -17,7 +17,13 @@ The following two arguments are needed for an execution:
 
 Example execution:
 ```
-./gradlew run --args "http://wiprodigital.com 15"
+./gradlew run --args "http://wiprodigital.com 10"
+```
+
+The suggestion is to pipe above into a file, like
+
+```
+./gradlew run --args "http://wiprodigital.com 10" > result.txt
 ```
 
 See also the [Main](src/main/java/org/webcrawly/Main.java) class.

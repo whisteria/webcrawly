@@ -2,6 +2,7 @@ package org.webcrawly.crawler;
 
 import org.webcrawly.Functions;
 import org.webcrawly.domain.Links;
+import org.webcrawly.domain.Links.Link;
 import org.webcrawly.domain.Pages.Page;
 import org.webcrawly.domain.Pages.PageCrawler;
 import org.webcrawly.domain.Pages.PageResult;
@@ -77,11 +78,11 @@ public class SiteCrawler implements PageResultCallback {
     }
 
     private void submitMissingResources(Page page) {
-        page.links()
+        page.links().get(ANCHOR)
                 .stream()
-                .filter(linkResult -> ANCHOR.equals(linkResult.type()))
-                .filter(linkResult -> linkResult instanceof Links.Link)
-                .map(linkResult -> ((Links.Link) linkResult).uri())
+                .map(url -> Links.createLink(page.uri(), url, ANCHOR))
+                .filter(linkResult -> linkResult instanceof Link)
+                .map(linkResult -> ((Link) linkResult).uri())
                 .filter(uri -> Functions.isInternal(rootDomain, uri))
                 .filter(Functions::isHttp)
                 .map(Functions::crawlerUri)

@@ -2,14 +2,13 @@ package org.webcrawly.crawler;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.webcrawly.domain.Links;
-import org.webcrawly.domain.Links.LinkResult;
+import org.webcrawly.domain.Links.LinkType;
 import org.webcrawly.domain.Pages.Page;
 import org.webcrawly.domain.Pages.PageCrawler;
 import org.webcrawly.domain.Pages.PageResultCallback;
 
 import java.net.URI;
-import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
@@ -30,9 +29,10 @@ public class JSoupPageCrawler implements PageCrawler {
     public void fetch(URI uri, PageResultCallback callback) throws Exception {
         // todo millis are hard coded
         final Document document = Jsoup.parse(uri.toURL(), 1000);
-        final Set<LinkResult> links = new HashSet<>();
-        getAnchors(document).forEach(url -> links.add(Links.createLink(uri, url, ANCHOR)));
-        getMedia(document).forEach(url -> links.add(Links.createLink(uri, url, MEDIA)));
+        final Map<LinkType, Set<String>> links = Map.of(
+                ANCHOR, getAnchors(document),
+                MEDIA, getMedia(document)
+        );
         callback.process(new Page(uri, links));
     }
 }

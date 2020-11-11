@@ -1,8 +1,6 @@
 package org.webcrawly.report;
 
 import org.webcrawly.crawler.CrawlerResult;
-import org.webcrawly.domain.Links.Link;
-import org.webcrawly.domain.Links.LinkResult;
 import org.webcrawly.domain.Pages.Page;
 import org.webcrawly.domain.Pages.PageError;
 import org.webcrawly.domain.Pages.PageResult;
@@ -31,16 +29,11 @@ public class ConsoleReporter implements Reporter {
     }
 
     private void reportPage(Page page) {
-        page.links().forEach(link -> System.out.println(showLink(link)));
+        page.links().values().forEach(links -> links.forEach(this::showLink));
     }
 
-    private Object showLink(LinkResult linkResult) {
-        if (linkResult instanceof Link link) {
-            return "❇️ " +link.uri();
-        } else {
-            return "❌ " + linkResult;
-        }
-
+    private void showLink(String link) {
+        System.out.println("❇️ " + link);
     }
 
 }

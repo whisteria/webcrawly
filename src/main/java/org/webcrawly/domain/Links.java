@@ -39,16 +39,10 @@ public class Links {
             final URI uri = source.resolve(url).normalize();
             // this checks if uri is valid for us
             uri.toURL();
-            return new Link(uri, type);
+            return new Link(Functions.absolute(source, uri), type);
         } catch (Exception e) {
             return new LinkError(url, type, CrawlerError.error(e));
         }
     }
 
-    public static LinkResult toAbsolute(URI uri, LinkResult linkResult) {
-        if (linkResult instanceof Link link) {
-            return new Link(Functions.absolute(uri, link.uri()), link.type());
-        }
-        return linkResult;
-    }
 }
